@@ -1,5 +1,5 @@
 use anyhow::Result;
-use simple_dns::{Config, SimpleDns};
+use simple_dns_server::{Config, SimpleDns};
 
 #[tokio::main]
 async fn main() -> Result<()> {
