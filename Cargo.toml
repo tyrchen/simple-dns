@@ -2,8 +2,17 @@
 name = "simple-dns-server"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+documentation = "https://docs.rs/simple-dns-server"
+repository = "https://github.com/tyrchen/simple-dns"
+homepage = "https://github.com/tyrchen/simple-dns"
+description = """
+Simple DNS server for easy integration.
+"""
+readme = "README.md"
+keywords = ["dns"]
+categories = ["development-tools", "network-programming"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 futures = { version = "0.3.23", default-features = false, features = ["std"] }
