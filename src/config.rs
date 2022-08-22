@@ -1,10 +1,9 @@
-use crate::dns::{get_forward_authority, get_record_name, load_zone, to_rdata};
+use crate::dns::{get_record_name, to_rdata};
+use crate::SimpleDnsError;
 use serde::{Deserialize, Serialize};
-use std::{collections::BTreeMap, net::SocketAddr, str::FromStr};
+use std::{collections::BTreeMap, net::SocketAddr};
 use trust_dns_proto::rr::RecordType;
 use trust_dns_proto::rr::{Record, RecordSet};
-use trust_dns_resolver::Name;
-use trust_dns_server::authority::Catalog;
 
 const DEFAULT_TTL: u32 = 3600;
 
@@ -42,7 +41,7 @@ impl RecordInfo {
         }
     }
 
-    pub fn to_record_set(self, origin: &str) -> Result<RecordSet, String> {
+    pub fn into_record_set(self, origin: &str) -> Result<RecordSet, SimpleDnsError> {
         let name = get_record_name(&self.name, origin)?;
         let record_type = self.record_type;
 
@@ -54,23 +53,5 @@ impl RecordInfo {
         }
 
         Ok(record_set)
-    }
-}
-
-impl Config {
-    pub async fn load_catalog(self) -> Result<Catalog, String> {
-        let mut catalog = Catalog::new();
-        for (domain, records) in self.domains {
-            let name = Name::from_str(&domain).map_err(|e| e.to_string())?;
-            let authority = load_zone(&domain, records)?;
-
-            catalog.upsert(name.into(), authority);
-        }
-
-        let origin = Name::from_str(".")?;
-        let authority = get_forward_authority(origin.clone()).await?;
-        catalog.upsert(origin.into(), authority);
-
-        Ok(catalog)
     }
 }
