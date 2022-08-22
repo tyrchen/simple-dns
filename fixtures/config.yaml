@@ -1,0 +1,10 @@
+bind: 0.0.0.0:53
+domains:
+  tyr.test:
+  - name: '@'
+    records: [127.0.0.1]
+  - name: www
+    records: [127.0.0.2]
+  - name: '*'
+    records: ['www']
+    type: CNAME
